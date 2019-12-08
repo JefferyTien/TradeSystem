@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.reddoor.framework.mapper.LogMapper">
+  <resultMap id="BaseResultMap" type="com.reddoor.framework.domain.Log">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="OPERATION_CODE" jdbcType="VARCHAR" property="operationCode" />
+    <result column="CREATER" jdbcType="VARCHAR" property="creater" />
+    <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="TYPE" jdbcType="INTEGER" property="type" />
+    <result column="OS" jdbcType="VARCHAR" property="os" />
+    <result column="BROWSER" jdbcType="VARCHAR" property="browser" />
+    <result column="IP" jdbcType="VARCHAR" property="ip" />
+    <result column="MAC" jdbcType="VARCHAR" property="mac" />
+    <result column="EXECUTE_TIME" jdbcType="INTEGER" property="executeTime" />
+    <result column="DESCRIPTION" jdbcType="VARCHAR" property="description" />
+    <result column="REQUEST_PARAM" jdbcType="VARCHAR" property="requestParam" />
+  </resultMap>
+</mapper>

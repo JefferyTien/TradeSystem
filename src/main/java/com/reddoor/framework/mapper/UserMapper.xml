@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.reddoor.framework.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="com.reddoor.framework.domain.User">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="LOGIN_NAME" jdbcType="VARCHAR" property="loginName" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="PASSWORD" jdbcType="VARCHAR" property="password" />
+    <result column="SALT" jdbcType="VARCHAR" property="salt" />
+    <result column="BIRTHDAY" jdbcType="TIMESTAMP" property="birthday" />
+    <result column="GENDER" jdbcType="SMALLINT" property="gender" />
+    <result column="EMAIL" jdbcType="VARCHAR" property="email" />
+    <result column="PHONE" jdbcType="VARCHAR" property="phone" />
+    <result column="ICON" jdbcType="VARCHAR" property="icon" />
+    <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="STATE" jdbcType="CHAR" property="state" />
+    <result column="LOGIN_COUNT" jdbcType="INTEGER" property="loginCount" />
+    <result column="PREVIOUS_VISIT" jdbcType="TIMESTAMP" property="previousVisit" />
+    <result column="LAST_VISIT" jdbcType="TIMESTAMP" property="lastVisit" />
+    <result column="DEL_FLAG" jdbcType="VARCHAR" property="delFlag" />
+    <result column="DESCRIPTION" jdbcType="LONGVARCHAR" property="description" />
+  </resultMap>
+  
+  <resultMap id="UserRM" type="com.reddoor.framework.domain.User" extends="BaseResultMap">
+    <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>	
+  <sql id="Base_Column_List" >
+    id, name, password, state
+  </sql>
+  <select id="selectByExample2" resultMap="BaseResultMap" parameterType="com.reddoor.framework.domain.UserExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  
+  <select id="getUser" resultMap="BaseResultMap" parameterType="string" >
+    select *
+    from user
+    where login_name = #{loginName}
+    
+  </select>
+  
+  <select id="getUserByPhone" resultMap="BaseResultMap" parameterType="string" >
+    select *
+    from user
+    where phone = #{phone}
+  </select>
+  
+  <update id="updateUser" parameterType="com.reddoor.framework.domain.User" >
+	    update user
+	    set login_name = #{loginName,jdbcType=VARCHAR},
+	      name = #{name,jdbcType=VARCHAR},
+	      birthday = #{birthday,jdbcType=TIMESTAMP},
+	      gender = #{gender,jdbcType=INTEGER},
+	      email = #{email,jdbcType=VARCHAR},
+	      phone = #{phone,jdbcType=VARCHAR},
+	      description = #{description,jdbcType=VARCHAR}
+	    where id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<update id="updatePwd" parameterType="com.reddoor.framework.domain.User" >
+	    update user
+	    set password=#{password,jdbcType=VARCHAR},
+	    salt=#{salt,jdbcType=VARCHAR}
+	    where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

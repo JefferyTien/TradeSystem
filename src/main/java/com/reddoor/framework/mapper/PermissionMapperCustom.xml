@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.reddoor.framework.mapper.PermissionMapperCustom">
+
+	<select id="findPermissionByUserId" parameterType="string" resultType="string">
+	
+		select permission_id
+		from role_permission
+		where role_id in (
+				select role_id 
+				from user_role
+				where user_id=#{id})
+	</select>
+
+	<select id="findPermissionListByUserId" parameterType="string" 
+		resultType="com.reddoor.framework.domain.Permission">
+		select * 
+		from permission
+		where type='O'
+			and id in (
+				select permission_id
+				from role_permission
+				where role_id in (
+					select role_id
+					from user_role
+					where user_id=#{id}))
+	</select>
+	
+	<select id="findMenuListByUserId" parameterType="string"
+		resultType="com.reddoor.framework.domain.Permission">
+		select *
+		from permission
+		where type='F'
+			and id in (
+				select permission_id
+				from role_permission
+				where role_id in (
+					select role_id
+					from user_role
+					where user_id=#{id}))
+	</select>
+</mapper>

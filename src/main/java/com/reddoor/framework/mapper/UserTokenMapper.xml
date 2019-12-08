@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.reddoor.framework.mapper.UserTokenMapper">
+  <resultMap id="BaseResultMap" type="com.reddoor.framework.domain.UserToken">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="USER_ID" jdbcType="INTEGER" property="userId" />
+    <result column="DEVICE_ID" jdbcType="INTEGER" property="deviceId" />
+    <result column="TOKEN" jdbcType="VARCHAR" property="token" />
+    <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="STATE" jdbcType="VARCHAR" property="state" />
+    <result column="REMARK" jdbcType="LONGVARCHAR" property="remark" />
+  </resultMap>
+  <select id="findUserToken" resultMap="BaseResultMap">
+		select *
+		from user_token 
+		where user_id=#{userId, jdbcType=INTEGER} and device_id=#{deviceId, jdbcType=INTEGER}  
+  </select>
+  
+</mapper>

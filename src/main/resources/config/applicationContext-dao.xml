@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xmlns="http://www.springframework.org/schema/beans"   
+    xmlns:aop="http://www.springframework.org/schema/aop"  
+    xmlns:context="http://www.springframework.org/schema/context"   
+    xmlns:tx="http://www.springframework.org/schema/tx"  
+    xmlns:cache="http://www.springframework.org/schema/cache"   
+    xmlns:p="http://www.springframework.org/schema/p"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans   
+     http://www.springframework.org/schema/beans/spring-beans-4.0.xsd  
+     http://www.springframework.org/schema/aop  
+     http://www.springframework.org/schema/aop/spring-aop-4.0.xsd  
+     http://www.springframework.org/schema/context  
+     http://www.springframework.org/schema/context/spring-context-4.0.xsd  
+     http://www.springframework.org/schema/tx  
+     http://www.springframework.org/schema/tx/spring-tx-4.0.xsd  
+     http://www.springframework.org/schema/cache   
+     http://www.springframework.org/schema/cache/spring-cache-4.0.xsd">  
+    <!-- 数据库连接配置 -->
+<!--     <context:property-placeholder location="classpath:config/jdbc.properties"/> -->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:config/jdbc.properties</value>
+			</list>
+		</property>
+	</bean>
+  	
+  	<!-- 注入数据源 -->
+<!--   	<bean id="jndidataSource" class="org.springframework.jndi.JndiObjectFactoryBean"> -->
+<!--   		<property name="jndiName"> -->
+<!--   			<value>java:comp/env/jdbc/chapter8</value> -->
+<!--   		</property> -->
+<!--   	</bean> -->
+  	
+<!--   	创建jdbc数据源   -->
+    <bean id="dataSource_dbcp" class="org.apache.commons.dbcp.BasicDataSource"  
+        destroy-method="close">  
+        <property name="driverClassName" value="${jdbc.driver}"></property>  
+        <property name="url" value="${jdbc.url}"></property>  
+        <property name="username" value="${jdbc.username}"></property>  
+        <property name="password" value="${jdbc.password}"></property>
+		<property name="initialSize" value="60" />
+		<property name="maxActive" value="100" />
+		<property name="maxIdle" value="50" />
+		<property name="testWhileIdle" value="true" />
+		<property name="minIdle" value="10" />
+		<property name="maxWait" value="20000" />
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<property name="removeAbandoned" value="true" />
+		<property name="removeAbandonedTimeout" value="180" />
+		<property name="logAbandoned" value="true" />
+    </bean>  
+    
+    <!-- 配置c3p0 -->  
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"  
+        destroy-method="close">  
+        <property name="driverClass" value="${jdbc.driver}" />  
+        <property name="jdbcUrl" value="${jdbc.url}" />  
+        <property name="user" value="${jdbc.username}" />  
+        <property name="password" value="${jdbc.password}" />  
+          
+        <property name="minPoolSize" value="2" />  
+        <property name="maxPoolSize" value="100" />  
+        <property name="maxIdleTime" value="300" />  
+        <property name="acquireIncrement" value="3" />  
+        <property name="maxStatements" value="100" />  
+        <property name="initialPoolSize" value="2" />
+        <property name="idleConnectionTestPeriod" value="60" />  
+        <property name="acquireRetryAttempts" value="30" />  
+        <property name="breakAfterAcquireFailure" value="true" />  
+        <property name="testConnectionOnCheckout" value="false" />  
+    </bean>
+    
+  	<!-- MyBatis 的SqlSessionFactory -->
+  	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean" scope="prototype">
+  		<property name="dataSource" ref="dataSource"></property>
+  		<property name="configLocation" value="classpath:config/mybatis.xml"></property>
+<!--   		<property name="configLocation" value="/WEB-INF/classes/config/mybatis.xml"></property> -->
+  	</bean>
+  	
+  	<!-- sqlSessionTemplate -->
+  	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate" scope="prototype">
+  		<constructor-arg index="0" ref="sqlSessionFactory"></constructor-arg>
+  	</bean>
+  	
+  	<!-- 事务管理 -->
+  	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+  		<property name="dataSource" ref="dataSource"></property>
+  	</bean>
+  	
+  	<!-- 使用注解管理事务 -->
+  	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+  	
+  	<!-- 采用自动扫描方式创建mapper bean -->
+<!--   	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"> -->
+<!--   		<property name="basePackage" value="com.reddoor.framework.mapper,com.reddoor.tradesystem.mapper,com.reddoor.tradesystem.mapper.authority"></property> -->
+<!--   		<property name="sqlSessionTemplateBeanName" value="sqlSessionTemplate"></property> -->
+<!--   		<property name="annotationClass" value="org.springframework.stereotype.Repository"></property> -->
+<!--   	</bean> -->
+  	
+  	<!-- 使用通用Mapper，见：https://mapperhelper.github.io/docs/1.integration/ --> 
+  	<bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
+  		<property name="basePackage" value="com.reddoor.framework.mapper,com.reddoor.tradesystem.mapper,com.reddoor.tradesystem.mapper.authority"></property>
+  	</bean>
+  	
+  	<!-- mybatis:scan会将com.lxt.mapper包里的所有接口当作mapper配置，之后可以自动引入mapper类-->    
+<!--     <mybatis:scan base-package="com.lxt.mapper"/>  -->
+</beans>  

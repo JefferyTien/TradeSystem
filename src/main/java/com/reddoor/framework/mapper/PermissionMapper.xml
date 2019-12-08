@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.reddoor.framework.mapper.PermissionMapper" >
+	<resultMap type="com.reddoor.framework.domain.Permission" id="BaseResultMap">
+		<id column="id" property="id" jdbcType="INTEGER"/>
+		<result column="pid" property="pid" jdbcType="INTEGER"/>
+		<result column="name" property="name" jdbcType="VARCHAR"/>
+		<result column="type" property="type" jdbcType="VARCHAR"/>
+		<result column="url" property="url" jdbcType="VARCHAR"/>
+		<result column="icon" property="icon" jdbcType="VARCHAR"/>
+		<result column="perm_code" property="permCode" jdbcType="VARCHAR"/>
+		<result column="sort" property="sort" jdbcType="INTEGER"/>
+		<result column="description" property="description" jdbcType="VARCHAR"/>
+		<result column="state" property="state" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		id, name, type, url, icon, perm_code, pid, sort, state
+	</sql>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem" open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap" parameterType="com.reddoor.framework.domain.PermissionExample">
+		select 
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from permission
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	
+	<select id="getMenus" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select p.*
+		from permission p
+		where p.id in(
+			select rp.permission_id
+			from role_permission rp 
+			INNER JOIN user_role ur on rp.role_id=ur.role_id
+			where ur.user_id=#{userId, jdbcType=INTEGER} 
+		) and p.type='F'
+		order by p.sort
+	</select>
+	
+	<select id="findAll" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select p.*
+		from permission p
+		order by p.sort
+	</select>
+	
+	<select id="getAllMenus" resultMap="BaseResultMap" >
+		select p.*
+		from permission p
+		where p.type='F' 
+		order by p.sort
+	</select>
+	
+	<select id="getPermissions" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select p.*
+		from permission p
+		where p.id in(
+			select rp.permission_id
+			from role_permission rp 
+			INNER JOIN user_role ur on rp.role_id=ur.role_id
+			where ur.user_id=#{userId, jdbcType=INTEGER} 
+		)
+		order by p.sort
+	</select>
+	
+	<select id="getMenuOperation" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select p.*
+		from permission p
+		where pid=#{pid, jdbcType=INTEGER} and type='O'
+		order by p.sort
+	</select>
+	
+	<select id="get" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select p.*
+		from permission p
+		where p.id=#{id} 
+	</select>
+	
+	<insert id="insert" parameterType="com.reddoor.framework.domain.Permission" >
+	    insert into permission (pid, name, type, sort, url, icon, description, perm_Code)
+	    values ( #{pid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+	      #{sort,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR}, 
+	      #{description,jdbcType=VARCHAR}, #{permCode,jdbcType=VARCHAR})
+  	</insert>
+  	
+  	<update id="update" parameterType="com.reddoor.framework.domain.Permission" >
+	    update permission
+	    set pid = #{pid,jdbcType=INTEGER},
+	      name = #{name,jdbcType=VARCHAR},
+	      sort = #{sort,jdbcType=INTEGER},
+	      url = #{url,jdbcType=VARCHAR},
+	      icon = #{icon,jdbcType=VARCHAR},
+	      description = #{description,jdbcType=VARCHAR},
+	      perm_code = #{permCode,jdbcType=VARCHAR}
+	    where id = #{id,jdbcType=VARCHAR}
+	</update>
+	
+	<delete id="delete" parameterType="java.lang.Integer" >
+	    delete from permission
+	    where id = #{id}
+	</delete>
+</mapper>
