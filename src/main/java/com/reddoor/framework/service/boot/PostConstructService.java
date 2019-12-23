@@ -34,9 +34,9 @@ public class PostConstructService  {
 		}
 		SysCache.sysConfigMap = sysConfigMap;
 		
-		// 加载classes根路径下的system.properties文件
+		// 加载classes根路径下的application.properties文件
 		String path = this.getClass().getResource("/").getPath();
-		String sysPropsPath = path + "/system.properties";
+		String sysPropsPath = path + "/application.properties";
 		File sysPropsFile = new File(sysPropsPath);
 		if(sysPropsFile.exists() && sysPropsFile.isFile()){
 			Properties sysProps = PropertiesUtils.getProperties(sysPropsPath);
