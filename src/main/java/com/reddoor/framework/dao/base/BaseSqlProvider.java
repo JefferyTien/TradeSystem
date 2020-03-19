@@ -69,7 +69,7 @@ public class BaseSqlProvider<T> {
  
 	private List<Field> getPrimarkKeyFields(Class clazz) {
  
-		List<Field> primaryKeyField = new ArrayList<>();
+		List<Field> primaryKeyField = new ArrayList<Field>();
 		List<Field> fields = getFields(clazz);
 		for (Field field : fields) {
 			field.setAccessible(true);
@@ -84,7 +84,7 @@ public class BaseSqlProvider<T> {
  
 	private List<Field> getFields(Class clazz) {
  
-		List<Field> fieldList = new ArrayList<>();
+		List<Field> fieldList = new ArrayList<Field>();
 		Field[] fields = clazz.getDeclaredFields();
 		for (Field field : fields) {
 			field.setAccessible(true);

@@ -8,10 +8,10 @@ import com.reddoor.tradesystem.domain.authority.SysUserRoleExample;
 import com.reddoor.tradesystem.domain.vo.RoleVO;
 import com.reddoor.tradesystem.mapper.authority.SysRoleMapper;
 import com.reddoor.tradesystem.mapper.authority.SysUserRoleMapper;
-import com.reddoor.tradesystem.service.RoleService;
+import com.reddoor.tradesystem.service.SysRoleService;
 
 @Service
-public class RoleServiceImpl implements RoleService{
+public class RoleServiceImpl implements SysRoleService{
 
 	@Autowired
     SysRoleMapper sysRoleMapper;

@@ -62,9 +62,9 @@ public class LoginController {
 		Subject currentUser = SecurityUtils.getSubject();
 		if(!currentUser.isAuthenticated()){
 			UsernamePasswordToken token = new UsernamePasswordToken(username, password);
-			if("on".equals(rememberme)){
-				token.setRememberMe(true);
-			}
+//			if("on".equals(rememberme)){
+//				token.setRememberMe(true);
+//			}
 			try{
 	            currentUser.login(token);
 	        }catch(UnknownAccountException ex){
@@ -73,6 +73,7 @@ public class LoginController {
 	        	map.put("msg", "password_error");
 	        }catch(AuthenticationException ex){
 	        	map.put("msg", "authentication_error");
+	        	ex.printStackTrace();
 	        }
 		}
 		
@@ -93,46 +94,46 @@ public class LoginController {
 	
 	private void fillSession(HttpSession session, String username){
 		
-		SysUser sysUser = null;
-		try{
-			sysUser = sysService.getSysUserByName(username);
-		}
-		catch(Exception e){
-			System.out.println(e);
-		}
-		
-		List<SysPermission> menus = null;
-		try{
-			menus = sysService.findMenuListByUserId(sysUser.getId());
-		}
-		catch (Exception e){
-			
-		}
-		
-		List<SysPermission> permissionList = null;
-		try {
-			permissionList = sysService.findPermissionListByUserId(sysUser.getId());
-		}
-		catch (Exception e){
-			
-		}
-		
-		List<String> permissions = new ArrayList<String>();
-		if(null != permissionList){
-			for(SysPermission sysPermission:permissionList){
-				permissions.add(sysPermission.getPercode());
-			}
-		}
+//		SysUser sysUser = null;
+//		try{
+//			sysUser = sysService.getSysUserByName(username);
+//		}
+//		catch(Exception e){
+//			System.out.println(e);
+//		}
+//		
+//		List<SysPermission> menus = null;
+//		try{
+//			menus = sysService.findMenuListByUserId(sysUser.getId());
+//		}
+//		catch (Exception e){
+//			
+//		}
+//		
+//		List<SysPermission> permissionList = null;
+//		try {
+//			permissionList = sysService.findPermissionListByUserId(sysUser.getId());
+//		}
+//		catch (Exception e){
+//			
+//		}
+//		
+//		List<String> permissions = new ArrayList<String>();
+//		if(null != permissionList){
+//			for(SysPermission sysPermission:permissionList){
+//				permissions.add(sysPermission.getPercode());
+//			}
+//		}
 		
 		// fill in session
-		if(null != sysUser){
-			LoginUserInfo userInfo = LoginUserInfo.build(sysUser);
-			session.setAttribute("user", userInfo);
-		}
-		
-		if(null != menus){
-			session.setAttribute("menus", menus);
-		}
+//		if(null != sysUser){
+//			LoginUserInfo userInfo = LoginUserInfo.build(sysUser);
+//			session.setAttribute("user", userInfo);
+//		}
+//		
+//		if(null != menus){
+//			session.setAttribute("menus", menus);
+//		}
 		
 //		if(null != permissionList){
 //			session.setAttribute("permissions", permissions);

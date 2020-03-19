@@ -83,7 +83,7 @@ public abstract class BaseServiceImpl<T, ID> implements BaseService<T, ID> {
     	//分页处理
     	PageHelper.startPage(page.getPageNo(), page.getPageSize(), true);
     	List<T> resultList =  getMapper().selectByExample(example);
-    	PageInfo<T> pageInfo = new PageInfo<>(resultList);
+    	PageInfo<T> pageInfo = new PageInfo<T>(resultList);
     	
     	page.setResult(resultList);
     	page.setTotalCount(pageInfo.getTotal());

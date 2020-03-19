@@ -55,7 +55,7 @@ public class JwtUtil {
         Date now = new Date(nowMillis);
 
         // 创建payload的私有声明（根据特定的业务需要添加，如果要拿这个做验证，一般是需要和jwt的接收方提前沟通好验证方式的）
-        Map<String, Object> claims = new HashMap<>();
+        Map<String, Object> claims = new HashMap<String, Object>();
         claims.put("uid", "123456");
         claims.put("user_name", "admin");
 

@@ -20,12 +20,12 @@ import com.reddoor.framework.utils.SysCache;
 public class PostConstructService  {
 	
 	@Autowired
-	ConfigurationService sysConfigurationService;
+	ConfigurationService configurationService;
 	
 	@PostConstruct
 	public void init() throws Exception{
 		// 加载数据库中sys_configuration表的所有系统配置, 并放入syscache缓存
-		List<Configuration> sysConfigList = sysConfigurationService.findAll();
+		List<Configuration> sysConfigList = configurationService.findAll();
 		Map<String, Configuration> sysConfigMap = new HashMap<String, Configuration>();
 		if(null != sysConfigList){
 			for(Configuration eachConfig:sysConfigList){

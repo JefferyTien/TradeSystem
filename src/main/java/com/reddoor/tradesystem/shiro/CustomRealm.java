@@ -22,7 +22,7 @@ import com.reddoor.tradesystem.domain.authority.SysPermission;
 import com.reddoor.tradesystem.domain.authority.SysUser;
 import com.reddoor.tradesystem.domain.customize.ActiveUser;
 import com.reddoor.tradesystem.domain.vo.RoleVO;
-import com.reddoor.tradesystem.service.RoleService;
+import com.reddoor.tradesystem.service.SysRoleService;
 import com.reddoor.tradesystem.service.SysService;
 
 @Service("customRealm")
@@ -32,7 +32,7 @@ public class CustomRealm extends AuthorizingRealm{
 	private SysService sysService;
 	
 	@Autowired
-	private RoleService roleService;
+	private SysRoleService sysRoleService;
 	
 	@Override
 	public void setName(String name) {
@@ -63,7 +63,7 @@ public class CustomRealm extends AuthorizingRealm{
 		
 		RoleVO sysRole = null;
 		try{
-			sysRole = roleService.findRoleByUserId(sysUser.getId());
+			sysRole = sysRoleService.findRoleByUserId(sysUser.getId());
 		}
 		catch (Exception e){
 			
